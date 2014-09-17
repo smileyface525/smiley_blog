@@ -14,4 +14,8 @@ class BlogsController < ApplicationController
     render json: @blog
   end
 
+  def new
+    redirect_to blogs_path unless session[:user_id]
+  end
+
 end
