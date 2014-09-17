@@ -42,4 +42,15 @@ describe BlogsController do
 
   end
 
+  describe "#new" do
+
+    context "if sesssion[:user_id] is not established," do
+      it "redirects the user to /blogs" do
+        get :new
+        expect(response).to redirect_to blogs_path
+      end
+    end
+
+  end
+
 end
