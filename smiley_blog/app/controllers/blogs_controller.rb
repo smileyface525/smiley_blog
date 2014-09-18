@@ -1,12 +1,8 @@
 class BlogsController < ApplicationController
 
   def index
-    if params[:tag_id]
-      @blogs = Blog.includes(:tags).where(tags: { id: params[:tag_id] })
-    else
-      @blogs = Blog.all
-    end
-      render json: @blogs
+    @blogs = params[:tag_id] ? Blog.includes(:tags).where(tags: { id: params[:tag_id] }) : Blog.all
+    render json: @blogs
   end
 
   def show
@@ -15,7 +11,7 @@ class BlogsController < ApplicationController
   end
 
   def new
-    redirect_to blogs_path unless session[:user_id]
+    redirect_to blogs_path unless logged_in?
   end
 
 end
