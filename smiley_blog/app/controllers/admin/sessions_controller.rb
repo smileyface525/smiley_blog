@@ -1,10 +1,13 @@
 class Admin::SessionsController < ApplicationController
 
+  def new
+  end
+
   def create
     user = params[:user] ? User.find_by_email(params[:user][:email]) : []
     if user.present? && user.authenticate(params[:user][:password])
       session[:user_id] = user.id
-      redirect_to new_blog_path
+      redirect_to root_path
     else
       @user = User.new
       render :new
@@ -13,7 +16,7 @@ class Admin::SessionsController < ApplicationController
 
   def destroy
     session.clear
-    redirect_to
+    redirect_to root_path
   end
 
 end
