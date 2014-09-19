@@ -5,7 +5,6 @@ describe Admin::SessionsController do
     describe "#create" do
 
       context "if the user's email and password match" do
-
         let!(:user) { FactoryGirl.create(:user) }
         let!(:attributes) { { user: FactoryGirl.attributes_for(:user) } }
 
@@ -18,16 +17,17 @@ describe Admin::SessionsController do
           post :create, attributes
           expect(response).to redirect_to new_blog_path
         end
-
       end
 
       context "if the user's email and password do not match" do
 
-        it "rerenders the login form" do
-          post :create
-        end
-
+        it "rerenders the login form"
       end
+    end
+
+    describe "#destroy" do
+
+      it "clears any ongoing sessions"
 
     end
 
