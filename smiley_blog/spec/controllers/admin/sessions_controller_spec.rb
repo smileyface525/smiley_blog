@@ -13,9 +13,9 @@ describe Admin::SessionsController do
         expect(session[:user_id]).to eq user.id
       end
 
-      it "redirects the user to /blogs/new" do
+      it "returns user data as json" do
         post :create, attributes
-        expect(response).to redirect_to root_path
+        expect(response.body).to eq(user.to_json)
       end
     end
 
