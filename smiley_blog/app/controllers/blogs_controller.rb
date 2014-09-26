@@ -14,4 +14,22 @@ class BlogsController < ApplicationController
     redirect_to blogs_path unless logged_in?
   end
 
+  def create
+    Blog.create(blog_params)
+    blogs = Blog.all
+    render json: blogs
+  end
+
+  def destroy
+    Blog.destroy(params[:id])
+    render json: Blog.all
+  end
+
+  private
+
+  def blog_params
+    params.require(:blog).permit(:title, :content)
+  end
+
+
 end
