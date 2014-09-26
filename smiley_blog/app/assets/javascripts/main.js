@@ -1,2 +1,5 @@
-//= require react
-//= require react/blog_box.react
+$(document).ready(function(){
+  React.renderComponent(BlogBox(null), document.getElementById("main_container"))
+})
+
+
