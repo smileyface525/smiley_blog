@@ -53,4 +53,24 @@ describe BlogsController do
 
   end
 
+  describe "#create" do
+    let(:attributes) { FactoryGirl.attributes_for(:blog) }
+
+    it "creates a blog" do
+      expect{post :create, blog: attributes}.to change{Blog.count}.by(1)
+    end
+
+    it "returns all blogs as json" do
+      post :create, blog: attributes
+      expect(response.body).to eq(Blog.all.to_json)
+    end
+
+  end
+
+  describe "#destroy" do
+    it "deletes a blog" do
+      expect{ delete :destroy, id: blog.id }.to change{Blog.count}.by(-1)
+    end
+  end
+
 end
