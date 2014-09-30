@@ -1,12 +1,13 @@
 /** @jsx React.DOM */
 
 var BlogDetail = React.createClass({displayName: 'BlogDetail',
+
   render: function() {
-    var blog = this.props.blogDetail;
+    var blog = this.props.blog;
     return (
-      React.DOM.section(null, 
-        React.DOM.h2(null, blog.title), 
-         this.props.loggedIn ? this.option() : null, 
+      React.DOM.section({className: "center"}, 
+        React.DOM.h2({className: "regular orange"}, blog.title), 
+        React.DOM.h5({className: "italic regular light-gray"}, "09-28-2014"), 
         React.DOM.p(null, blog.content)
       )
     )

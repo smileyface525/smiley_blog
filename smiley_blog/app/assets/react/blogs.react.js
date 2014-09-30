@@ -3,14 +3,13 @@
 
 var Blogs = React.createClass({
   render: function() {
-    var blogs = [];
-    this.props.blogs.forEach(function(blog){
-      blogs.push( <Blog blog={blog} /> )
-    });
     return (
-      <section className="relative pad-t-12">
-        <ul>
-          {blogs}
+      <section className="center mt3 mb3">
+        <h2 className="regular orange">{this.props.currentTag}</h2>
+        <ul className="list-reset">
+          {this.props.blogs.map(function(blog) {
+            return <Blog blog={blog} />
+          })}
         </ul>
       </section>
     )
