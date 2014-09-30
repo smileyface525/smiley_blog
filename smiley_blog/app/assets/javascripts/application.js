@@ -13,5 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require react
-//= require react/blog_box.react
+//= require react/app.react
 //= require main.js

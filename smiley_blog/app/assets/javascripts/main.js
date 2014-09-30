@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  React.renderComponent(BlogBox(null), document.getElementById("main_container"))
+  React.renderComponent(App(null), document.body)
 })
 
 

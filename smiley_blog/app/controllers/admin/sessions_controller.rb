@@ -4,6 +4,10 @@ class Admin::SessionsController < ApplicationController
     render json: current_user
   end
 
+  def new
+
+  end
+
   def create
     user = params[:user] ? User.find_by_email(params[:user][:email]) : []
     if user.present? && user.authenticate(params[:user][:password])

@@ -1,8 +1,16 @@
+//= require constants/blog_constants
+//= require constants/tag_constants
+//= require dispatchers/blog_dispatcher
+//= require dispatchers/tag_dispatcher
+
 var BlogStore = (function(){
 
   var _blogs = [];
+  var _current_blog = null;
   var CHANGE_EVENT = 'change';
-  var ActionTypes = BlogConstants.ActionTypes;
+  var SHOW_EVENT = 'show';
+  var BlogActionTypes = BlogConstants.ActionTypes;
+  var TagActionTypes = TagConstants.ActionTypes;
 
   return {
 
@@ -10,12 +18,27 @@ var BlogStore = (function(){
       return _blogs;
     },
 
-    getAllBlogs: function() {
+    currentBlog: function() {
+      return _current_blog;
+    },
+
+    setCurrentBlog: function(blog) {
+      _current_blog = blog;
+      this.triggerShow();
+    },
+
+    unsetCurrentBlog: function() {
+      _current_blog = null;
+      this.triggerShow();
+    },
+
+    getBlogs: function(tag) {
       $.ajax({
         url: "/blogs",
+        data: {tag: tag},
         success: function(allBlogs) {
-          this.blogList = allBlogs;
-          $(this).trigger('change');
+          _blogs = allBlogs;
+          this.triggerChange();
         }.bind(this)
       })
     },
@@ -52,20 +75,40 @@ var BlogStore = (function(){
       $(this).on(CHANGE_EVENT, callback);
     },
 
+    triggerShow: function() {
+      $(this).trigger(SHOW_EVENT);
+    },
+
+    addShowEvent: function(callback) {
+      $(this).on(SHOW_EVENT, callback);
+    },
+
     payload: function(payload) {
       var action = payload.action;
+
       switch(action.type) {
-        case ActionTypes.CREATE_BLOG:
-          this.postBlog(blogData);
+        case BlogActionTypes.SHOW_DETAIL:
+          this.setCurrentBlog(action.data);
         break;
-        case ActionTypes.DELETE_BLOG:
+        case BlogActionTypes.CREATE_BLOG:
+          this.postBlog(action.data);
+        break;
+        case BlogActionTypes.DELETE_BLOG:
           this.deleteBlog(blogId);
+        break;
+        case TagActionTypes.SHOW_ALL_BLOGS:
+          this.unsetCurrentBlog();
+          this.getBlogs(action.data);
+        break;
+        case TagActionTypes.SHOW_RECENT_BLOGS:
+          this.unsetCurrentBlog();
+          this.getBlogs(action.data);
         break;
       }
     }
+  }
 
-  }()
-);
+}());
 
-
-}
+BlogDispatcher.register(BlogStore.payload.bind(BlogStore));
+TagDispatcher.register(BlogStore.payload.bind(BlogStore));
