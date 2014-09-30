@@ -1,8 +1,14 @@
 class BlogsController < ApplicationController
 
   def index
-    @blogs = params[:tag_id] ? Blog.includes(:tags).where(tags: { id: params[:tag_id] }) : Blog.all
-    render json: @blogs
+    case params[:tag]
+    when tag_exists?
+      render json: Blog.with(params[:tag])
+    when "Recent"
+      render json: Blog.recent
+    else "All"
+      render json: Blog.all
+    end
   end
 
   def show
@@ -31,5 +37,8 @@ class BlogsController < ApplicationController
     params.require(:blog).permit(:title, :content)
   end
 
+  def tag_exists?
+    Tag.all.map(&:name).include? params[:tag]
+  end
 
 end
