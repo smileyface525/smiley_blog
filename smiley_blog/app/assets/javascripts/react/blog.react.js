@@ -1,16 +1,17 @@
 /** @jsx React.DOM */
+//= require actions/blog_actions
 
 var Blog = React.createClass({displayName: 'Blog',
 
   render: function() {
     var blog = this.props.blog
     return (
-      React.DOM.li(null, React.DOM.a({href: "#", 'data-blog-id': blog.id, onClick: this.showDetail, className: "mid-gray"}, blog.title), blog.updated_at)
+      React.DOM.li(null, React.DOM.a({ref: "#", key: blog.id, ref: "title", onClick: this.handleClick}, blog.title))
     )
   },
-
-  showDetail: function(event) {
+  handleClick: function(event) {
     event.preventDefault();
-    $(Blog).trigger('showDetail', this.props.blog);
+    BlogActions.showDetail(this.props.blog);
   }
+
 })
