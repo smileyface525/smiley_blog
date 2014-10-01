@@ -9,15 +9,15 @@ var Navbar = React.createClass({
   },
 
   render: function() {
-    debugger
+    var currentTag = this.props.currentTag;
+    var withOrange = "mid-gray italic orange";
+    var noOrange = "mid-gray italic";
+
     return (
       <nav className="bor-dot-top bor-dot-bottom">
         <ul className="m1">
-          {TagStore.permanentTags().map(function(tag) {
-            return <li className="inline mr1"><a href="#" className="mid-gray italic" data-tag-name={tag} onClick={this.handleClick}>{tag}</a></li>
-          }.bind(this))}
-          {this.props.tags.map(function(tag) {
-            return <li className="inline mr1"><a href="#"  className="mid-gray italic" key={tag.id} data-tag-name={tag.name} onClick={this.handleClick} >{tag.name}</a></li>
+          {TagStore.tags().map(function(tag) {
+            return <li className="inline mr1"><a href="#" className={ tag === currentTag ? withOrange : noOrange} data-tag-name={tag} onClick={this.handleClick}>{tag}</a></li>
           }.bind(this))}
         </ul>
       </nav>

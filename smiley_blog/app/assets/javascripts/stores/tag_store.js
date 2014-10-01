@@ -3,7 +3,7 @@
 
 var TagStore = (function() {
   var _tags = ["All", "Recent"];
-  var _currentTag = _permanentTags[0];
+  var _currentTag = _tags[0];
   var TAGS_CHANGE_EVENT = "tagsChanged";
   var TAG_CHANGE_EVENT = "tagChanged";
   var TagActionTypes = TagConstants.ActionTypes;
@@ -16,10 +16,6 @@ var TagStore = (function() {
 
     currentTag: function() {
       return _currentTag;
-    },
-
-    permanentTags: function() {
-      return _permanentTags;
     },
 
     getAllTags: function() {
