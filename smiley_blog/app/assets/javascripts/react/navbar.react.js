@@ -4,19 +4,15 @@
 
 var Navbar = React.createClass({displayName: 'Navbar',
 
-  componentDidMount: function() {
-    $('nav a').eq(0).addClass('orange');
-  },
-
   render: function() {
     var currentTag = this.props.currentTag;
     var withOrange = "mid-gray italic orange";
     var noOrange = "mid-gray italic";
 
     return (
-      React.DOM.nav({className: "bor-dot-top bor-dot-bottom"}, 
+      React.DOM.nav({className: "center bor-dot-top bor-dot-bottom"}, 
         React.DOM.ul({className: "m1"}, 
-          TagStore.tags().map(function(tag) {
+          this.props.tags.map(function(tag) {
             return React.DOM.li({className: "inline mr1"}, React.DOM.a({href: "#", className:  tag === currentTag ? withOrange : noOrange, 'data-tag-name': tag, onClick: this.handleClick}, tag))
           }.bind(this))
         )
@@ -27,14 +23,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
   handleClick: function(event) {
     event.preventDefault();
     var tagClicked = event.target.dataset.tagName;
-    switch(tagClicked) {
-      case "All":
-        TagActions.showAllBlogs(tagClicked);
-      break;
-      case "Recent":
-        TagActions.showRecentBlogs(tagClicked);
-      break;
-    }
+    TagActions.showBlogs(tagClicked);
   }
 
 })
