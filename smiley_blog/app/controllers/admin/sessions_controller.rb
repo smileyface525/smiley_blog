@@ -4,6 +4,10 @@ class Admin::SessionsController < ApplicationController
     render json: current_user
   end
 
+  def new
+
+  end
+
   def create
     user = params[:user] ? User.find_by_email(params[:user][:email]) : []
     if user.present? && user.authenticate(params[:user][:password])
@@ -11,13 +15,13 @@ class Admin::SessionsController < ApplicationController
       # redirect_to root_path
       render json: user
     else
-      render json: {notFound: true}
+      render json: {msg: "Login failed. Please try again."}, status: :unprocessable_entity
     end
   end
 
   def destroy
     session.clear
-    render json: {loggedOut: true}
+    render json: nil
   end
 
 end

@@ -1,26 +1,29 @@
 /** @jsx React.DOM */
-//= require stores/user_store
+//= require stores/tag_store
+//=require actions/tag_actions
 
 var Navbar = React.createClass({displayName: 'Navbar',
+
   render: function() {
+    var currentTag = this.props.currentTag;
+    var withOrange = "mid-gray italic orange";
+    var noOrange = "mid-gray italic";
+
     return (
-      React.DOM.nav(null, 
-        React.DOM.ul(null, 
-          React.DOM.li(null, React.DOM.a({href: "#", onClick: this.createBlog}, "create")), 
-          React.DOM.li(null, React.DOM.a({href: "#", onClick: this.logOut}, "logout"))
+      React.DOM.nav({className: "center bor-dot-top bor-dot-bottom"}, 
+        React.DOM.ul({className: "m1"}, 
+          this.props.tags.map(function(tag) {
+            return React.DOM.li({className: "inline mr1"}, React.DOM.a({href: "#", className:  tag === currentTag ? withOrange : noOrange, 'data-tag-name': tag, onClick: this.handleClick}, tag))
+          }.bind(this))
         )
       )
     )
   },
 
-  createBlog: function(event) {
+  handleClick: function(event) {
     event.preventDefault();
-    $(Navbar).trigger("createBlog")
-  },
-
-  logOut: function(event) {
-    event.preventDefault();
-    UserStore.logOutUser();
+    var tagClicked = event.target.dataset.tagName;
+    TagActions.showBlogs(tagClicked);
   }
 
 })
