@@ -1,16 +1,9 @@
 
 var TagActions = {
 
-  showAllBlogs: function(tagName) {
+  showBlogs: function(tagName) {
     TagDispatcher.handleViewAction({
-      type: TagConstants.ActionTypes.SHOW_ALL_BLOGS,
-      data: tagName
-    })
-  },
-
-  showRecentBlogs: function(tagName) {
-    TagDispatcher.handleViewAction({
-      type: TagConstants.ActionTypes.SHOW_RECENT_BLOGS,
+      type: TagConstants.ActionTypes.SHOW_BLOGS,
       data: tagName
     })
   }
