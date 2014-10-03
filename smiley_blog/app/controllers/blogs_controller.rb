@@ -2,12 +2,12 @@ class BlogsController < ApplicationController
 
   def index
     case params[:tag]
-    when tag_exists?
-      render json: Blog.with(params[:tag])
+    when "All"
+      render json: Blog.all
     when "Recent"
       render json: Blog.recent
-    else "All"
-      render json: Blog.all
+    else
+      render json: tag_exists? ? Blog.with(params[:tag]) : Blog.all
     end
   end
 
