@@ -323,6 +323,10 @@ td {
   white-space: nowrap;
 }
 
+.y15 {
+  height: 15rem;
+}
+
 .m0 {
   margin: 0;
 }
@@ -441,6 +445,11 @@ td {
 
 .ml6 {
   margin-left: 6rem;
+}
+
+.mx1 {
+  margin-left: .5rem;
+  margin-right: .5rem;
 }
 
 .mxn1 {
