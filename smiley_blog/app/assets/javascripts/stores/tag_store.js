@@ -2,13 +2,18 @@
 //= require dispatchers/tag_dispatcher
 
 var TagStore = (function() {
-  var _tags = ["All", "Recent"];
-  var _currentTag = _tags[0];
+  var _defaultTags = ["All", "Recent"];
+  var _tags = [];
+  var _currentTag = _defaultTags[0];
   var TAGS_CHANGE_EVENT = "tagsChanged";
   var TAG_CHANGE_EVENT = "tagChanged";
   var TagActionTypes = TagConstants.ActionTypes;
 
   return {
+
+    allTags: function() {
+      return _defaultTags.concat(_tags);
+    },
 
     tags: function() {
       return _tags;
@@ -55,10 +60,7 @@ var TagStore = (function() {
       var action = payload.action;
 
       switch(action.type) {
-        case TagActionTypes.SHOW_ALL_BLOGS:
-          this.updateCurrentTag(action.data);
-        break;
-        case TagActionTypes.SHOW_RECENT_BLOGS:
+        case TagActionTypes.SHOW_BLOGS:
           this.updateCurrentTag(action.data);
         break;
       }
