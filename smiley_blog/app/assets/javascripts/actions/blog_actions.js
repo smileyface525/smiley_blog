@@ -15,6 +15,20 @@ var BlogActions = {
       type: BlogConstants.ActionTypes.SHOW_FORM,
       data: blog
     })
+  },
+
+  create: function(blog) {
+    BlogDispatcher.handleViewAction({
+      type: BlogConstants.ActionTypes.CREATE_BLOG,
+      data: blog
+    })
+  },
+
+  distroy: function(blogID) {
+    BlogDispatcher.handleViewAction({
+      type: BlogConstants.ActionTypes.DELETE_BLOG,
+      data: blogID
+    })
   }
 
 }

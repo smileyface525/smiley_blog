@@ -2,6 +2,8 @@
 //= require constants/tag_constants
 //= require dispatchers/blog_dispatcher
 //= require dispatchers/tag_dispatcher
+//= require stores/tag_store
+//= require actions/tag_actions
 
 var BlogStore = (function() {
 
@@ -13,6 +15,22 @@ var BlogStore = (function() {
   var SHOW_EVENT = 'show';
   var BlogActionTypes = BlogConstants.ActionTypes;
   var TagActionTypes = TagConstants.ActionTypes;
+
+  var setPageToShow = function(newPage) {
+    _pageToShow = newPage;
+  };
+  var addBlogToList = function(newBlog) {
+    _blogs.push(newBlog);
+  };
+  var deleteBlogFromList = function(deletedBlog) {
+    var index = _blogs.length - 1;
+    _blogs.forEach(function(blog) {
+      if(blog.id === deletedBlog.id) {
+        _blogs.splice(index, 1);
+        index--;
+      }
+    })
+  };
 
   return {
 
@@ -46,7 +64,7 @@ var BlogStore = (function() {
 
     showForm: function(blog) {
       _blogToEdit = blog;
-      _pageToShow = "blogForm";
+      setPageToShow("blogForm");
       this.triggerShow();
     },
 
@@ -56,7 +74,7 @@ var BlogStore = (function() {
         data: {tag: tag},
         success: function(allBlogs) {
           _blogs = allBlogs;
-          _pageToShow = "blogList";
+          setPageToShow("blogList");
           this.triggerChange();
         }.bind(this)
       })
@@ -68,8 +86,12 @@ var BlogStore = (function() {
         type: "POST",
         data: blogData
       })
-      .done(function(newBlogs) {
-        this.blogList = newBlogs;
+      .done(function(newBlog) {
+        if(newBlog.newTags.length > 0) {
+          TagStore.addTags(newBlog.newTags);
+        }
+        addBlogToList(newBlog.blog);
+        setPageToShow("blogList");
         this.triggerChange();
       }.bind(this))
     },
@@ -80,9 +102,11 @@ var BlogStore = (function() {
         url: url,
         type: "DELETE"
       })
-      .done(function(blogs) {
-        this.blogList = blogs;
-        this.triggerChange();
+      .done(function(deletedBlog) {
+        deleteBlogFromList(deletedBlog);
+        setPageToShow("blogList");
+        TagStore.getAllTags();
+        _blogs.length === 0 ? TagActions.showBlogs(TagStore.defaultTag()) : this.triggerChange();
       }.bind(this))
     },
 
