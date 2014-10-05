@@ -2,12 +2,17 @@
 //= require dispatchers/tag_dispatcher
 
 var TagStore = (function() {
+
   var _defaultTags = ["All", "Recent"];
   var _tags = [];
   var _currentTag = _defaultTags[0];
   var TAGS_CHANGE_EVENT = "tagsChanged";
   var TAG_CHANGE_EVENT = "tagChanged";
   var TagActionTypes = TagConstants.ActionTypes;
+
+  var setTags = function(newTags) {
+    _tags = newTags.map(function(tag){ return tag.name; });
+  };
 
   return {
 
@@ -23,16 +28,30 @@ var TagStore = (function() {
       return _currentTag;
     },
 
+    addTags: function(newTags) {
+      newTags.forEach(function(newTag) {
+        _tags.push(newTag);
+      })
+      this.triggerTagsChange();
+    },
+
+    defaultTag: function() {
+      return _defaultTags[0];
+    },
+
     getAllTags: function() {
       $.ajax({
         url: "/tags"
       })
       .done(function(allTags){
-        allTags.forEach(function(tag){
-          _tags.push(tag.name)
-        });
+        setTags(allTags);
         this.triggerTagsChange();
       }.bind(this))
+    },
+
+    changeToDefault: function() {
+      _currentTag = this.defaultTag();
+      this.triggerTagChange();
     },
 
     updateCurrentTag: function(newTag) {

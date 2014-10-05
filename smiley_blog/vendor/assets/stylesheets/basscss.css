@@ -274,6 +274,10 @@ td {
   max-width: 100%;
 }
 
+.third-width {
+  width: 30%;
+}
+
 .half-width {
   width: 50%;
 }

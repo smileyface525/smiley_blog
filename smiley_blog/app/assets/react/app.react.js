@@ -62,7 +62,7 @@ var App = React.createClass({
     var currentPage = this.state.currentPage;
     switch (currentPage) {
       case "blogDetail":
-        return <BlogDetail blog={this.state.currentBlog} />;
+        return <BlogDetail currentUser={this.state.currentUesr} blog={this.state.currentBlog} />;
       break;
       case "loginForm":
         return <LoginForm />
