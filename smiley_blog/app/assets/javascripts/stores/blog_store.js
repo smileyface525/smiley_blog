@@ -20,7 +20,10 @@ var BlogStore = (function() {
     _pageToShow = newPage;
   };
   var addBlogToList = function(newBlog) {
-    _blogs.push(newBlog);
+    _blogs.unshift(newBlog);
+  };
+  var updateBlogs = function(blogs) {
+    _blogs = blogs;
   };
   var deleteBlogFromList = function(deletedBlog) {
     var index = _blogs.length - 1;
@@ -65,7 +68,18 @@ var BlogStore = (function() {
     showForm: function(blog) {
       _blogToEdit = blog;
       setPageToShow("blogForm");
-      this.triggerShow();
+      if (blog !== null) {
+        TagStore.addTagsReceivedEvent(function(event, tags) {
+          _blogToEdit.tags = tags.map(function(tag){
+            return tag.name;
+          })
+          this.triggerShow();
+        }.bind(this));
+        TagStore.getTagsForBlog(blog.id);
+      }
+      else {
+        this.triggerShow();
+      }
     },
 
     getBlogs: function(tag) {
@@ -92,8 +106,27 @@ var BlogStore = (function() {
         }
         addBlogToList(newBlog.blog);
         setPageToShow("blogList");
+        TagStore.getAllTags();
         this.triggerChange();
       }.bind(this))
+    },
+
+    updateBlog: function(blog) {
+      var url = "/blogs/" + blog.id;
+      $.ajax({
+        url: url,
+        type: "PUT",
+        data: blog.inputs
+      })
+      .done(function(allBlogs) {
+        updateBlogs(allBlogs);
+        setPageToShow("blogList");
+        TagStore.getAllTags();
+        this.triggerChange();
+      }.bind(this))
+      .fail(function(a, b, c) {
+        debugger
+      })
     },
 
     deleteBlog: function(blogId) {
@@ -139,8 +172,11 @@ var BlogStore = (function() {
         case BlogActionTypes.CREATE_BLOG:
           this.postBlog(action.data);
         break;
+        case BlogActionTypes.UPDATE_BLOG:
+          this.updateBlog(action.data);
+        break;
         case BlogActionTypes.DELETE_BLOG:
-          this.deleteBlog(blogId);
+          this.deleteBlog(action.data);
         break;
         case TagActionTypes.SHOW_BLOGS:
           this.unsetCurrentBlog();
