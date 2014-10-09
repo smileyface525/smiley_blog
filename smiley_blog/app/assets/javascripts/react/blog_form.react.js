@@ -13,22 +13,30 @@ var BlogForm = React.createClass({displayName: 'BlogForm',
   inputNames: ['title', 'content'],
 
   render: function() {
-    var blog = this.props.blogToBeEdited === null ? false : this.props.blogToBeEdited;
-    var tags = this.props.tags;
+    var blog = this.props.blog;
+    var allTags = this.props.tags;
+    var tags = blog ? blog.tags : [];
+
     return (
       React.DOM.section({className: "center mt3 mb3"}, 
         React.DOM.h2({className: "regular orange"},  blog ? "Update" : "New"), 
         React.DOM.p(null, this.state.errorMsg), 
         React.DOM.form({action: "#", onSubmit: this.handleSubmit}, 
           React.DOM.p({className: "mid-gray"}, "tags: "), 
-          tags.map(function(tag) {
+          allTags.map(function(tag) {
             var name = "tag[" + tag + "]";
-            return React.DOM.label({className: "mid-gray"}, React.DOM.input({name: name, type: "checkbox", value: tag}), tag);
+            var checked = $.inArray(tag, tags) === -1 ? null : "checked";
+            return React.DOM.label({className: "mid-gray"}, 
+                    React.DOM.input({
+                      name: name, 
+                      type: "checkbox", 
+                      defaultValue: tag, 
+                      defaultChecked: checked}), tag);
           }), 
           React.DOM.a({href: "#", id: "addTag", className: "mx1 light-gray italic", onClick: this.addTagInput}, "add"), 
            this.state.tagInputs, 
-          React.DOM.input({type: "text", name: "blog[title]", placeholder: "title", value: blog ? blog.title : null, className: "block mx-auto half-width"}), 
-          React.DOM.textarea({name: "blog[content]", className: "block mx-auto half-width y15 h5"}, blog ? blog.content : null), 
+          React.DOM.input({type: "text", name: "blog[title]", placeholder: "title", defaultValue: blog ? blog.title : null, className: "block mx-auto half-width"}), 
+          React.DOM.textarea({name: "blog[content]", defaultValue: blog ? blog.content : null, className: "block mx-auto half-width y15 h5"}), 
           React.DOM.input({type: "submit", value: blog ? "update blog" : "create blog", className: "button-gray mx-auto"})
         )
       )
@@ -63,7 +71,13 @@ var BlogForm = React.createClass({displayName: 'BlogForm',
   handleSubmit: function(event) {
     event.preventDefault();
     var blogInputs = $(event.target).serialize();
-    BlogActions.create(blogInputs);
+    if(this.props.blog) {
+      var blog = {id: this.props.blog.id, inputs: blogInputs}
+      BlogActions.update(blog);
+    }
+    else {
+      BlogActions.create(blogInputs);
+    }
   }
 
 })

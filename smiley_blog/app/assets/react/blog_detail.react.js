@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+//=require react/blog_options.react
 
 var BlogDetail = React.createClass({
 
@@ -9,29 +10,16 @@ var BlogDetail = React.createClass({
     return (
       <section className="center">
         <h2 className="regular orange">{blog.title}</h2>
-        <h5 className="italic regular light-gray">09-28-2014</h5>
+        <h5 className="italic regular light-gray">{this.format_date(blog.updated_at)}</h5>
         <p>{blog.content}</p>
-        { user ? this.option() : null }
+        <BlogOptions blog={blog} currentUser={user} />
       </section>
     )
   },
 
-  option: function() {
-    return (
-      <ul>
-        <li className="inline mr1 bold"><a href="#" onClick={this.deleteBlog} className="mid-gray" >delete</a></li>
-        <li className="inline mr1 bold"><a href="#" onClick={this.editBlog} className="mid-gray" >edit</a></li>
-      </ul>
-    )
-  },
-
-  deleteBlog: function(event) {
-    event.preventDefault();
-    BlogStore.deleteBlog(this.props.blog.id);
-  },
-
-  editBlog: function(event) {
-    event.preventDefault();
-    $(BlogDetail).trigger("editBlog", this.props.blogDetail);
+  format_date: function(date) {
+    formatted_date = new Date(date);
+    return formatted_date.toDateString();
   }
+
 })

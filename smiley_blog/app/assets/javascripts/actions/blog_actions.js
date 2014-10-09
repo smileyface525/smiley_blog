@@ -24,7 +24,14 @@ var BlogActions = {
     })
   },
 
-  distroy: function(blogID) {
+  update: function(blog) {
+    BlogDispatcher.handleViewAction({
+      type: BlogConstants.ActionTypes.UPDATE_BLOG,
+      data: blog
+    })
+  },
+
+  destroy: function(blogID) {
     BlogDispatcher.handleViewAction({
       type: BlogConstants.ActionTypes.DELETE_BLOG,
       data: blogID
