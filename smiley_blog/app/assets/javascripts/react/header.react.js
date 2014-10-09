@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+//= require actions/tag_actions
 
 var Header = React.createClass({displayName: 'Header',
 
@@ -8,9 +9,15 @@ var Header = React.createClass({displayName: 'Header',
 
     return (
       React.DOM.header({className: "center"}, 
-        React.DOM.h1(null, "sm", React.DOM.a({href: "#", className: "orange"}, ":)"), "eyblog"), 
+        React.DOM.h1(null, "sm", React.DOM.a({href: "#", className: "orange", onClick: this.showDefaultPage}, ":)"), "eyblog"), 
         React.DOM.p(null, "hello", greeting, "!")
       )
     )
+  },
+
+  showDefaultPage: function(event) {
+    event.preventDefault();
+    TagActions.showBlogs(TagStore.defaultTag());
   }
+
 })
