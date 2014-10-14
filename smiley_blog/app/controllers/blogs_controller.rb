@@ -1,14 +1,17 @@
 class BlogsController < ApplicationController
+  ALL_TAG = 'All'
+  RECENT_TAG = 'Recent'
 
   def index
     case params[:tag]
-    when "All"
-      render json: Blog.all.order(updated_at: :desc)
-    when "Recent"
-      render json: Blog.recent
+    when ALL_TAG
+      blogs =  Blog.all.order(updated_at: :desc)
+    when RECENT_TAG
+      blogs =  Blog.recent
     else
-      render json: tag_exists? ? Blog.with(params[:tag]) : Blog.all
+      blogs =  Tag.exists?(name: params[:tag].titleize) ? Blog.with(params[:tag]) : Blog.all
     end
+    render json: blogs
   end
 
   def show
@@ -87,10 +90,6 @@ class BlogsController < ApplicationController
       "tag#{i}".to_sym
     end
     params.require(:newTag).permit(permitted_names)
-  end
-
-  def tag_exists?
-    Tag.all.map(&:name).include? params[:tag]
   end
 
 end
