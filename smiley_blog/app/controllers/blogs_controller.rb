@@ -15,8 +15,12 @@ class BlogsController < ApplicationController
   end
 
   def show
-    @blog = Blog.find(params[:id])
-    render json: @blog
+    begin
+      blog = Blog.find(params[:id])
+      render json: blog
+    rescue
+      render json: {error: "Coundn't find record"}, status: :not_found
+    end
   end
 
   def new
@@ -24,16 +28,9 @@ class BlogsController < ApplicationController
   end
 
   def create
-    new_tag_names = []
     new_blog = Blog.create(blog_params)
-    if params[:newTag]
-      new_tags.each do |tag|
-        new_blog.tags << tag
-        new_tag_names << tag.name
-      end
-    end
-    tags.each { |tag| new_blog.tags << tag } if params[:tag]
-    render json: {blog: new_blog, newTags: new_tag_names}
+    (tags + new_tags).each { |tag| new_blog.tags << tag }
+    render json: new_blog
   end
 
   def update
@@ -66,7 +63,7 @@ class BlogsController < ApplicationController
 
   def tags
     if params[:tag]
-      tag_params.values.map { |name| Tag.find_or_create_by(name: name)}
+      tag_params.values.map { |name| Tag.find_by(name: name)}
     else
       []
     end
@@ -74,13 +71,13 @@ class BlogsController < ApplicationController
 
   def new_tags
     if params[:newTag]
-      new_tag_params.values.map { |name| Tag.create(name: name) }
+      new_tag_params.values.map { |name| Tag.find_or_create_by(name: name.titleize) }
     else
       []
     end
   end
 
-  def tag_params
+  def new_tag_params
     permited_names = Tag.all.map(&:name).map(&:to_sym)
     params.require(:tag).permit(permited_names)
   end
