@@ -26,11 +26,11 @@ var BlogStore = (function() {
     _blogs = blogs;
   };
   var deleteBlogFromList = function(deletedBlog) {
-    var index = _blogs.length - 1;
+    var index = 0;
     _blogs.forEach(function(blog) {
       if(blog.id === deletedBlog.id) {
         _blogs.splice(index, 1);
-        index--;
+        index++;
       }
     })
   };
@@ -101,10 +101,7 @@ var BlogStore = (function() {
         data: blogData
       })
       .done(function(newBlog) {
-        if(newBlog.newTags.length > 0) {
-          TagStore.addTags(newBlog.newTags);
-        }
-        addBlogToList(newBlog.blog);
+        addBlogToList(newBlog);
         setPageToShow("blogList");
         TagStore.getAllTags();
         this.triggerChange();
