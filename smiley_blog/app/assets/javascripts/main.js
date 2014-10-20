@@ -1,5 +1,2 @@
-$(document).ready(function(){
-  React.renderComponent(App(null), document.body)
-})
-
+var app = angular.module('blog', []);
 

@@ -12,6 +12,5 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require react
-//= require react/app.react
+//= require angular
 //= require main.js
