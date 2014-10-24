@@ -1,2 +1,24 @@
+<div ng-controller="BlogController as blogCtrl" >
+  <h1>Hello</h1>
+  <ul >
+    <li class="inline" >
+      <a href ng-click="blogCtrl.setCurrentBlogTo(1)" ng-class="{orange:blogCtrl.currentBlogIs(1)}">blog 1</a>
+    </li>
 
-<p>{{1+2}}</p>
+    <li class="inline">
+      <a href ng-click="blogCtrl.setCurrentBlogTo(2)" ng-class="{orange:blogCtrl.currentBlogIs(2)}">blog 2</a>
+    </li>
+
+    <li class="inline">
+      <a href ng-click="blogCtrl.setCurrentBlogTo(3)" ng-class="{orange:blogCtrl.currentBlogIs(3)}">blog 3</a>
+    </li>
+  </ul>
+  <div ng-repeat="blog in blogCtrl.blogs | orderBy: 'title'">
+    <div ng-show="blogCtrl.currentBlog === blog.id">
+      <h2>{{blog.title}}</h2>
+      <p>Last Update: {{blog.updatedOn | date}}</p>
+      <p>{{blog.content}}</p>
+      <button ng-show="blogCtrl.user.loggedIn">Edit</button>
+    </div>
+  </div>
+</div>
